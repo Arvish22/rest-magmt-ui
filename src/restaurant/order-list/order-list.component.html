@@ -1,1 +1,13 @@
-<p>order-list works!</p>
+<div class="col-lg-4 col-sm-2 h2 text-center">
+    <h2>Select Items</h2>
+    <div *ngFor="let order of orders">
+    <div *ngFor="let el of order.items">
+        {{el.it.name}}.....{{el.count}}x{{el.it.price}}
+    </div>
+        <div>
+        Total ............................{{order.total}}
+        </div>
+        
+<h2>____________________________________________________________________________-</h2>
+</div>
+</div>

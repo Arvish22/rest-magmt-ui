@@ -5,6 +5,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MenuComponent } from './menu/menu.component';
 import { OrderBookComponent } from './order-book/order-book.component';
 import { OrderListComponent } from './order-list/order-list.component';
+import { ConfigComponent } from './config/config.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EditMenuComponent } from './config/edit-menu/edit-menu.component';
 
 
 
@@ -14,9 +17,13 @@ import { OrderListComponent } from './order-list/order-list.component';
     DashboardComponent,
     MenuComponent,
     OrderBookComponent,
-    OrderListComponent
+    OrderListComponent,
+    ConfigComponent,
+    EditMenuComponent
   ],
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
     CommonModule
   ]
 })

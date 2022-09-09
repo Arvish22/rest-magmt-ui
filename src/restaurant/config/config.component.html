@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-4"></div>
+  <div class="col-4">
+    <form [formGroup]="categoryForm" (ngSubmit)="onSubmit(categoryForm.value)">
+
+      <div class="text-center mb-4">
+        <h2>Add Category</h2>
+      </div>
+      <div class="form-outline mb-4">
+        <label class="form-label">Category Name</label>
+        <input type="text" class="form-control" formControlName="name" name="username" required />
+      </div>
+      <button type="submit" class="btn btn-primary btn-block mb-4">save</button>
+    </form>
+  </div>
+  <div class="col-4">
+    <h2 class="text-center">Category List</h2>
+    <div class="text-right" *ngFor = "let category of categories">
+      {{category.name}}
+      <button (click)="del(category.id)" class="text-danger">Delete</button>
+    </div>
+  </div>
+</div>
+
+<app-edit-menu></app-edit-menu>
+
+

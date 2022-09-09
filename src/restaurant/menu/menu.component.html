@@ -17,6 +17,8 @@
             <div>
             Total ............................{{total}}
             </div>
+            <a class="btn btn-primary" (click)="placeOrder()">Add</a>
+            
     </div>
     <div class="col-lg-4 col-sm-4" *ngIf="isMenu">
         <div *ngFor="let el of data">

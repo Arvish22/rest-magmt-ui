@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col-4"></div>
+    <div class="col-4">
+      <form [formGroup]="itemForm" (ngSubmit)="createItems(itemForm.value)">
+  
+        <div class="text-center mb-4">
+          <h2>Add Menu</h2>
+        </div>
+        <div class="form-outline mb-4">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" formControlName="name" name="name" required />
+        </div>
+        <div class="form-outline mb-4">
+            <label class="form-label">Price</label>
+            <input type="text" class="form-control" formControlName="price" name="price" required />
+          </div>
+          <div class="form-outline mb-4">
+            <label class="form-label">Description</label>
+            <input type="text" class="form-control" formControlName="description" name="description" required />
+          </div>
+
+          <div class="form-outline mb-4">
+            <label class="form-label">Category</label>
+            <select #categry name="categories" id="categories" formControlName="category" name="category" required>
+              <option  *ngFor="let category of categories" [ngValue]="category.name">{{category.name}}</option>
+            </select>
+            <!-- <input type="text" class="form-control" formControlName="category" name="category" required /> -->
+          </div>
+        <button type="submit" class="btn btn-primary btn-block mb-4">save</button>
+      </form>
+    </div>
+    <div class="col-4">
+      <h2 class="text-center">Menu List</h2>
+      <div class="text-right" *ngFor = "let item of items">
+        {{item.name}}
+        <button (click)="deleteItem(item.id)" class="text-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+  

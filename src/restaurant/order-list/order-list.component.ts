@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CartService } from '../shared/service/cart.service';
 
 @Component({
   selector: 'app-order-list',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrderListComponent implements OnInit {
 
-  constructor() { }
+  constructor(private cartService : CartService) { }
+
+orders : any[] = [];
 
   ngOnInit(): void {
+    this.cartService.getOrder().subscribe(res=>{
+      res.forEach(x=>{
+        let ord = x.payload.doc.data();
+        this.orders.push(ord);
+        console.log(this.orders);
+      });
+    })
   }
+
 
 }
