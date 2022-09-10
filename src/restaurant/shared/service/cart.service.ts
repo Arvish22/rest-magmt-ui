@@ -9,16 +9,9 @@ export class CartService {
   constructor(private firestore: AngularFirestore ) {}
 
   createOrder(data : any) {
-    console.log("************8888",data);
-    return new Promise<any>((resolve, reject) =>{
-        this.firestore
+       return this.firestore
             .collection("orders")
-            .add(data)
-            .then(res => {
-            }, err => {
-              console.log("*****888");
-              reject(err)});
-    });
+            .add(data);
 }
 
 getOrder() { 
@@ -28,7 +21,7 @@ getOrder() {
 updateOrder(data : any) {
   return this.firestore
       .collection("orders")
-      .doc(data.payload.doc.id)
+      .doc(data)
       .set({ completed: true }, { merge: true });
 }
 

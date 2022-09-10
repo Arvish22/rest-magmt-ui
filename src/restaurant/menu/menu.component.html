@@ -1,58 +1,93 @@
-<h2 class="text-center">Menu</h2>
-<div class="row mb-5">
-    <div class="col-lg-4 col-sm-2" *ngIf="isMenu">
-        <h2 class="text-center">Categories</h2>
-        <div class="row">
-            <div *ngFor="let el of data" class="col-2">
-                <h6 (click)="select(el.category)" 
-                [ngClass]="selectCategory == el.category?'selected':'notSelected'">{{el.category}}</h6>
-            </div>
+<div class="container-xxl py-5">
+    <div class="container">
+        <div *ngIf="table.isAvailbe">Scanned Table is Full right now</div>
+        <div *ngIf="isMenu">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h5 class="section-title ff-secondary text-center text-primary fw-normal">Food Menu</h5>
+            <h1 class="mb-5">Most Popular Items</h1>
         </div>
-    </div>
-    <div class="col-lg-4 col-sm-2 h2 text-center" *ngIf="isCart">
-        <h2>Select Items</h2>
-        <div *ngFor="let el of cart">
-            {{el.it.name}}.....{{el.count}}x{{el.it.price}}
-        </div>
-            <div>
-            Total ............................{{total}}
-            </div>
-            <a class="btn btn-primary" (click)="placeOrder()">Add</a>
-            
-    </div>
-    <div class="col-lg-4 col-sm-4" *ngIf="isMenu">
-        <div *ngFor="let el of data">
-            <div *ngIf="selectCategory == el.category">
-                <!-- <h4 class="text-center">{{el.category}}</h4> -->
-                <div class="card mt-2" *ngFor="let item of el.items">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-8">
-                                <h5 class="card-title">{{item.name}}</h5>
-                                <p class="card-text h6">{{item.price}}</p>
-                                <p class="card-text">{{item.description}}</p>
-                                <a class="btn btn-primary" (click)="add(item)">Add</a>
-                            </div>
-                            <div class="col-4">
-                                <img src="../../app/shared/big-hamburger-with-double-beef-french-fries_252907-8.jpg">
-                            </div>
+        <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.1s">
+            <ul class="nav nav-pills d-inline-flex justify-content-center border-bottom mb-0">
+                <li class="nav-item" *ngFor="let el of data; let i = index" (click)="select(el.category)">
+                    <a class="d-flex align-items-center text-start mx-3 ms-0 pb-3 active" data-bs-toggle="pill" [href]="'#tab-'+i">
+                        <i class="fa fa-coffee fa-2x text-primary"></i>
+                        <div class="ps-3">
+                            <small class="text-body">Popular</small>
+                            <h6 class="mt-n1 mb-0">{{el.category}}</h6>
                         </div>
+                    </a>
+                </li>
+            </ul>
+ <div class="tab-content">
+    <div  class="tab-pane fade show p-0 active" *ngFor="let el of data; let i = index" [id]="'tab-'+i">
+        <div class="row g-4">
+            <div class="col-lg-6" *ngFor="let item of el.items">
+                <div class="d-flex align-items-center shadow p-3 mb-1 mt-0 bg-white rounded" *ngIf="selectCategory == el.category">
+                    <img class="flex-shrink-0 img-fluid rounded" src="img/menu-1.jpg" alt="" style="width: 80px;">
+                    <div class="w-100 d-flex flex-column text-start ps-4">
+                        <h5 class="d-flex justify-content-between border-bottom pb-2">
+                            <span>{{item.name}}</span>
+                            <span class="text-primary">{{item.price}}</span>
+                        </h5>
+                        <small class="fst-italic ">{{item.description}}<button class="flt-right btn-red bi bi-plus" [disabled]="!table.isAvailbe" (click)="add(item)"></button></small>
+                        <div class=""></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<div class="row">
-    <div class="col-4"></div>
-    <div class="col-4">
-        <div class="fixed-bottom cart-btn " (click)="selectPage('cart')" *ngIf="isMenu">
+</div>
+</div>
+<!-- //*ngIf="selectCategory == el.category" -->
+<div *ngIf="isCart">
+    <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+        <h5 class="section-title ff-secondary text-center text-primary fw-normal">Table {{tableNo}}</h5>
+        <h1 class="mb-5">Your Order</h1>
+    </div>
+<div class="tab-content">
+    <div  class="tab-pane fade show p-0 active">
+        <div class="row g-4 shadow mb-0 mt-0 bg-white rounded">
+            <div class="col-lg-12 mb-0 mt-0" *ngFor="let el of cart" >
+                <div class="d-flex align-items-center mt-0 mb-0">
+                    <div class="w-100 d-flex flex-column text-start ps-5">
+                        <h6 class="d-flex justify-content-between border-bottom pb-2">
+                            <span>{{el.it.name}}</span>
+                            <span>
+                                <span class="text-primary">{{el.count}}x{{el.it.price}}</span>
+                                <small>
+                                    <button class="bi bi-plus btn-red ml-1" (click)="add(el.it)"></button>
+                                    <button class="bi bi-trash btn-red ml-1" (click)="(el.it)"></button>
+                                </small>
+                            </span>
+                        </h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 shadow mb-0 mt-0 bg-white rounded">
+                <div class="d-flex align-items-center mt-0 mb-0" >
+                    <div class="w-100 d-flex flex-column text-start ps-5">
+                        <h5 class="d-flex justify-content-between border-bottom pb-2 mr-4">
+                            <span>Total</span>
+                            <span class="text-primary">{{total}}
+                            </span>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            <small class="fst-italic">
+                <a class="btn btn-warning flt-right ml-1" (click)="finishOrder()">Finish Order</a>
+                <a class="btn btn-warning flt-right ml-1 mb-4" (click)="placeOrder()">Place Order</a>
+            </small>
+        </div>
+    </div>
+</div>
+</div>
+  <div class="fixed-bottom cart-btn " (click)="selectPage('cart')" *ngIf="isMenu && table.isAvailbe">
             <p>Cart <span class="quant">{{itemCount}}</span></p>
         </div>
         <div class="fixed-bottom cart-btn " (click)="selectPage('menu')" *ngIf="isCart">
             <p>Menu</p>
         </div>
-    </div>
-    <div class="col-4"></div>
+</div>
 </div>

@@ -7,6 +7,7 @@ import { CartService } from '../shared/service/cart.service';
   styleUrls: ['./order-list.component.scss']
 })
 export class OrderListComponent implements OnInit {
+  isExpand: any = -1;
 
   constructor(private cartService : CartService) { }
 
@@ -22,5 +23,15 @@ orders : any[] = [];
     })
   }
 
+  clickMe(value : any){
+    value.srcElement.innerHTML="Clicked";
 
+  }
+
+  expandOrder(i : any){
+    if(this.isExpand == i)
+      this.isExpand = -1;
+    else
+     this.isExpand = i;
+  }
 }

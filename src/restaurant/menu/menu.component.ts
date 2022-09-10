@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Item } from '../shared/modal/item';
+import { Order } from '../shared/modal/order';
+import { Table } from '../shared/modal/table';
 import { CartService } from '../shared/service/cart.service';
 import { ItemService } from '../shared/service/item.service';
+import { TableService } from '../shared/service/table.service';
 
 @Component({
   selector: 'app-menu',
@@ -51,16 +55,58 @@ export class MenuComponent implements OnInit {
     items : Item[]
   }[] = [];
 
-  cart : any[] = [];
+  cart : {it : Item, count : number }[] = [];
   selectCategory: any;
   itemCount: string = "";
   isCart: boolean = false;
   isMenu: boolean = true;
+  tableNo: any;
+  table : Table = {
+    isAvailbe : true,
+    table : 0
+  };
 
-  constructor(private itemService : ItemService,private cartService : CartService) { }
+  order : Order = {
+    id : null,
+    total : 0,
+    items : this.cart,
+    isPlaced : true,
+    isFinished : false,
+    table : this.table
+  }
+
+  constructor(private itemService : ItemService,
+    private cartService : CartService,
+    private route: ActivatedRoute,
+    private tableService: TableService) { 
+    this.tableNo = this.route.snapshot.params?.['table'];
+
+    this.tableService.getTables().subscribe(res =>{
+
+      res.forEach((x)=>{
+        
+        let data = x.payload.doc.data() as Table;
+        if(data.table == this.tableNo){
+          this.table = data;
+        }
+    });
+  });
+}
 
   ngOnInit(): void {
+    
     //this.selectCategory = this.data[0].category;
+
+    this.cartService.getOrder().subscribe(res=>{
+      res.forEach(x=>{
+        let ord = x.payload.doc.data() as Order;
+        if(ord.table == this.tableNo && !ord.isFinished){
+          console.log(ord);
+              this.order = ord;
+        }
+      });
+    })
+    
     this.itemService.getItems().subscribe(res => {
       this.data = [];
       res.forEach(x=>{
@@ -86,11 +132,7 @@ export class MenuComponent implements OnInit {
   }
 
   total : number = 0;
-  add(item : {
-    name: any,
-    price : number,
-    description : any
-  }){
+  add(item : Item){
 
     let i = {it : item, count : 1 };
     let isPresent = this.cart.find(x=>{
@@ -103,7 +145,7 @@ export class MenuComponent implements OnInit {
     })
     if(!isPresent){ 
 
-      this.cart.push(i);
+      this.cart.push( i );
       let cartLength = this.cart.length;
       this.itemCount = cartLength + ' x Items';
       this.total = this.total + i.it.price;
@@ -111,12 +153,20 @@ export class MenuComponent implements OnInit {
   }
 
   placeOrder(){
-    let order = {
+    let order : Order = {
+      id : null,
       total : this.total,
       items : this.cart,
-      isPlaced : true
+      isPlaced : true,
+      isFinished : false,
+      table : this.table
     }
-    this.cartService.createOrder(order).then(res=>{});
+
+    this.cartService.createOrder(order).then(res=>{
+      console.log(res.id);
+      this.order.id = res.id;
+    });
+
   }
 
   updateOrder(){
@@ -137,5 +187,11 @@ export class MenuComponent implements OnInit {
       this.isCart = false;
       this.isMenu = true;
     }
+  }
+
+  finishOrder(){
+    console.log(this.order);
+    this.order.isFinished = true;
+    this.cartService.updateOrder(this.order.id);
   }
 }
